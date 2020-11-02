@@ -25,9 +25,22 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
   function faqsHandler(agent){
     const pregunta = agent.parameters.Preguntas;
     let response = 'Perdón esa pregunta no se encuentra';
-    if(pregunta == '¿Que tipo de doctores hay?'){
-      response = 'Hay doctores para consulta general y oncologos';
-    }
+    switch(pregunta){
+    case '¿Qué doctores hay?':
+        response = 'Actualmente estan el doctor José, Benjamin y la doctora Victoria.';
+        break;
+    case '¿Que tipo de doctores hay?':
+        response = 'Hay doctores para consulta general, nutriologia y traumatologia.';
+        break;
+    case 'A que hora cierran':
+        response = 'El horario es de 8 am a 6 pm';
+        break;
+    case '¿Cuanto sale la consulta?':
+        response = 'El precio de la cita depende del tipo de cita';
+        break;
+    default:
+        response = 'Perdón esa pregunta no se encuentra';
+}
     agent.add(response);
   }
   
