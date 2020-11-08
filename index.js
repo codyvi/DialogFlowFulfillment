@@ -2,9 +2,12 @@
 // for Dialogflow fulfillment library docs, samples, and to report issues
 'use strict';
 
+/* jshint esversion: 8 */
+
 const functions = require('firebase-functions');
 const {WebhookClient} = require('dialogflow-fulfillment');
 const {Card, Suggestion} = require('dialogflow-fulfillment');
+const fetch = require('node-fetch');
  
 process.env.DEBUG = 'dialogflow:debug'; // enables lib debugging statements
  
@@ -22,6 +25,43 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
     agent.add(`I'm sorry, can you try again?`);
   }
   
+  async function CreateAppointment(doctor, sintoma, fecha, nombre){
+    var id  = nombre;
+    var date = fecha;
+    var sint = sintoma;
+    var doc = doctor;
+
+    let url2 = ''; //Aqui va la url del metodo post para crear la cita
+    let settings2 = {
+      //Cambiar el body una vez que el post este hecho
+        method: 'POST',
+        body: JSON.stringify({
+            id: id,
+            exp: dExp
+        }),
+        headers: {
+            'Content-Type': 'application/json'
+        },
+    };
+
+    fetch(url2, settings2)
+    .then( response => {
+        if ( response.ok ){
+            return response.json();
+        }
+
+        throw new Error ( response.statusText );
+    })
+    .then( responseJSON => {
+
+        console.log(responseJSON);
+    })
+    .catch( err => {
+        console.log( err );
+    });
+}
+  
+
   function ReservaHandler(agent){
     const sintoma = agent.parameters.Sintoma; 
    	const fecha = agent.parameters.date;
