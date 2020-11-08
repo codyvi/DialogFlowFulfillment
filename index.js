@@ -1,7 +1,7 @@
 // See https://github.com/dialogflow/dialogflow-fulfillment-nodejs
 // for Dialogflow fulfillment library docs, samples, and to report issues
 'use strict';
- 
+
 const functions = require('firebase-functions');
 const {WebhookClient} = require('dialogflow-fulfillment');
 const {Card, Suggestion} = require('dialogflow-fulfillment');
@@ -20,6 +20,14 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
   function fallback(agent) {
     agent.add(`I didn't understand`);
     agent.add(`I'm sorry, can you try again?`);
+  }
+  
+  function ReservaHandler(agent){
+    const sintoma = agent.parameters.Sintoma; 
+   	const fecha = agent.parameters.date;
+    const doctor = agent.parameters.doctor;
+    agent.add(`Su cita con el doctor ${doctor} por el ${sintoma} el ${fecha} ha sido creada y confirmada.`);
+   
   }
 
   function faqsHandler(agent){
@@ -49,5 +57,6 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
   intentMap.set('Default Welcome Intent', welcome);
   intentMap.set('Default Fallback Intent', fallback);
   intentMap.set('PreguntasFrecuentes', faqsHandler);
+  intentMap.set('ReservaCita', ReservaHandler);
   agent.handleRequest(intentMap);
 });
