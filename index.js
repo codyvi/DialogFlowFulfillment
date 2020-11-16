@@ -25,19 +25,22 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
     agent.add(`I'm sorry, can you try again?`);
   }
   
-  async function CreateAppointment(doctor, sintoma, fecha, nombre){
+  async function CreateAppointment(doctor, sintoma, fecha, nombre, motivo){
     var id  = nombre;
     var date = fecha;
     var sint = sintoma;
     var doc = doctor;
+    var mot = motivo;
 
-    let url2 = ''; //Aqui va la url del metodo post para crear la cita
+    let url2 = 'http://127.0.0.1:4000/api/citas/'; //Aqui va la url del metodo post para crear la cita
     let settings2 = {
-      //Cambiar el body una vez que el post este hecho
         method: 'POST',
         body: JSON.stringify({
-            id: id,
-            exp: dExp
+            paciente: id,
+            sintomas: sint,
+          	motivoCita: mot,
+          	doctor: doc,
+          	fecha: date
         }),
         headers: {
             'Content-Type': 'application/json'
@@ -66,7 +69,10 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
     const sintoma = agent.parameters.Sintoma; 
    	const fecha = agent.parameters.date;
     const doctor = agent.parameters.doctor;
-    agent.add(`Su cita con el doctor ${doctor} por el ${sintoma} el ${fecha} ha sido creada y confirmada.`);
+    const id = agent.parameters.Id;
+    const Motivo = agent.parameters.Motivo;
+    agent.add(`Perfecto, la cita para el paciente ${id} con el doctor ${doctor} por el ${sintoma} y el motivo ${Motivo} con fecha ${fecha} ha sido creada y confirmada.`);
+    CreateAppointment(doctor, sintoma, fecha, id, Motivo);
    
   }
 
