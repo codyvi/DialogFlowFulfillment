@@ -26,13 +26,15 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
   }
   
   async function CreateAppointment(doctor, sintoma, fecha, nombre, motivo){
-    var id  = nombre;
-    var date = fecha;
-    var sint = sintoma;
-    var doc = doctor;
-    var mot = motivo;
+    var id  = nombre;//'5fb5a27610b4214fe4fea919';
+    var date = fecha;//'2020-11-16T12:00:00-06:00';
+    var tempsint = sintoma;//'Dolor de cabeza';
+    var sint = tempsint.toString(); //Convertir arrray de sintoma a string
+    var tempdoc = doctor;//'Strange';
+    var doc = tempdoc.toString();  //Convertir arrray de doctor a string
+    var mot = motivo;//'No aguanto el dolor';
 
-    let url2 = 'http://127.0.0.1:4000/api/citas/'; //Aqui va la url del metodo post para crear la cita
+    let url2 = 'https://fastmedexp.herokuapp.com/api/citas/'; //Aqui va la url del metodo post para crear la cita
     let settings2 = {
         method: 'POST',
         body: JSON.stringify({
@@ -46,7 +48,7 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
             'Content-Type': 'application/json'
         },
     };
-
+	console.log(settings2);
     fetch(url2, settings2)
     .then( response => {
         if ( response.ok ){
